@@ -30,6 +30,11 @@ using namespace HalconCpp;
 
 
 int main(int argc, char * argv[]){
+
+	if(argc < 3)
+	{
+		std::cout << "2 Image paths as input arguments needed for this test, meaning that argc should be at least 3 but is now " << argc << std::endl;
+	}
   HTuple a(1);
   HTuple b(2);
   HTuple c(0);
@@ -41,15 +46,15 @@ int main(int argc, char * argv[]){
 
   try {
 
-	  std::string path = "/home/svn/projects/fiad/src/fiad_halcon/halcon_if/hdev_engine_ros_if"; //ros::package::getPath("halcon_ros_if");
-	  path += "/src/";
+	  std::string path = ros::package::getPath("halcon_if_test");
+	  path += "/halcon_components/hdev";
 	  CALL_PROCEDURE(path.c_str(),
 			  simple_test_procedure, hv_mode, &hv_result);
 	  std::cout << "res = " << hv_result.I() << std::endl;
 
 	  //std::cin.get();
 
-	  CALL_PROCEDURE("/home/svn/projects/fiad/src/fiad_halcon/halcon_if/hdev_engine_ros_if/src/",
+	  CALL_PROCEDURE(path.c_str(),
 			  simple_test_procedure, hv_mode, &hv_result);
 	  std::cout << "res = " << hv_result.I() << std::endl;
 
@@ -59,8 +64,9 @@ int main(int argc, char * argv[]){
 	  HImage image;
 	  HObject im_Res;
 	  std::cout << "Im size before fill = " << sizeof(image) << std::endl;
-	  HTuple file("/home/svn/Downloads/IMAG0231.jpg");
-	  HTuple file2("/home/svn/Downloads/images.jpeg");
+
+	  HTuple file(argv[2]);
+	  HTuple file2(argv[1]);
 	  CALL_PROCEDURE("", read_image, file , &image);
 
 	  CALL_PROCEDURE("", read_image, file2, &im_Res);
