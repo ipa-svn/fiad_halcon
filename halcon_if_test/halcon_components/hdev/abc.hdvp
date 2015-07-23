@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.0" halcon_version="11.0.4" cs="763519202">
+<procedure name="abc">
+<interface>
+<io>
+<par name="bild"/>
+<par name="bild2"/>
+</io>
+<oo>
+<par name="pattern"/>
+</oo>
+<ic>
+<par name="todo"/>
+</ic>
+<oc>
+<par name="res"/>
+</oc>
+</interface>
+<body>
+<l>WinID := 1</l>
+<l>dev_open_window (0, 0, 900, 900, 'white', WinID)</l>
+<c></c>
+<l>dev_display(bild)</l>
+<c></c>
+<l>wait_seconds(1)</l>
+<l>dev_close_window ()</l>
+<l>res := 1</l>
+<l>return ()</l>
+</body>
+<docu id="abc">
+<parameters>
+<parameter id="bild"/>
+<parameter id="bild2"/>
+<parameter id="pattern"/>
+<parameter id="res"/>
+<parameter id="todo"/>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>

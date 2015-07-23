@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hdevelop file_version="1.0" halcon_version="11.0.4" cs="780531738">
+<procedure name="simple_test_procedure">
+<interface>
+<ic>
+<par name="mode"/>
+</ic>
+<oc>
+<par name="result"/>
+</oc>
+</interface>
+<body>
+<l>if (mode = 'def')</l>
+<l>    result := 3</l>
+<l>else</l>
+<l>    result := 2</l>
+<l>endif</l>
+<c>    </c>
+<c></c>
+<l>return ()</l>
+</body>
+<docu id="simple_test_procedure">
+<parameters>
+<parameter id="mode">
+<default_type>string</default_type>
+<default_value>def</default_value>
+<description lang="en_US">Decides which part of the simple test to execute</description>
+<mixed_type>false</mixed_type>
+<multivalue>false</multivalue>
+<sem_type>string</sem_type>
+<type_list>
+<item>string</item>
+</type_list>
+</parameter>
+<parameter id="result">
+<default_type>integer</default_type>
+<mixed_type>false</mixed_type>
+<multivalue>false</multivalue>
+<sem_type>integer</sem_type>
+<type_list>
+<item>integer</item>
+</type_list>
+<value_max>255</value_max>
+</parameter>
+</parameters>
+</docu>
+</procedure>
+</hdevelop>
