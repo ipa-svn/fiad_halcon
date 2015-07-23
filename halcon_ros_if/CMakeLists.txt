@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS system)
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -83,10 +83,10 @@ find_package(OpenCV REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include
-#  LIBRARIES halcon_ros_if
+  INCLUDE_DIRS include /opt/halcon/include /opt/halcon/include/hdevengine
+  LIBRARIES halcon_ros_if #TODO add with path hdevenginecpp halconcpp halcon
   CATKIN_DEPENDS roscpp sensor_msgs std_msgs
-  DEPENDS OpenCV
+  #DEPENDS OpenCV
 )
 
 ###########
@@ -100,19 +100,22 @@ include_directories(
   include
   /opt/halcon/include
   /opt/halcon/include/hdevengine
-  ${OpenCV_INCLUDE_DIRS}
+  #${OpenCV_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
 link_directories(/opt/halcon/lib/x64-linux2.4-gcc40)
 
 ## Declare a cpp library
-# add_library(halcon_ros_if SHARED
-#  src/halcon_ros_if.cpp
-# )
+add_library(halcon_ros_if 
+ 	src/halcon_bridge.cpp 
+ 	src/halcon_bindings.cpp 
+ 	src/my_hdevoperatorimpl.cpp 
+ 	src/my_thread_impl.cpp
+ 	)
 
 ## Declare a cpp executable
-add_executable(halcon_ros_if src/test_main.cpp src/halcon_bridge.cpp src/halcon_bindings.cpp src/my_hdevoperatorimpl.cpp src/my_thread_impl.cpp)
+#add_executable(halcon_ros_if src/test_main.cpp src/halcon_bridge.cpp src/halcon_bindings.cpp src/my_hdevoperatorimpl.cpp src/my_thread_impl.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
@@ -123,7 +126,6 @@ target_link_libraries(halcon_ros_if
   hdevenginecpp
   halconcpp
   halcon
-  ${OpenCV_LIBS}
   ${catkin_LIBRARIES}
 )
 
