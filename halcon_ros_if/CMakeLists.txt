@@ -6,6 +6,8 @@ project(halcon_ros_if)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  halcon_runtime_rpkg
+  halcon_deveng_rpkg
   roscpp
   sensor_msgs
   std_msgs
@@ -83,9 +85,10 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS include /opt/halcon/include /opt/halcon/include/hdevengine
-  LIBRARIES halcon_ros_if #TODO add with path hdevenginecpp halconcpp halcon
-  CATKIN_DEPENDS roscpp sensor_msgs std_msgs
+  INCLUDE_DIRS include /opt/halcon/include/hdevengine /opt/halcon/include 
+  #LIBRARY depend on HDEV or not which is chosen from application. TODO Find out how to handle this.
+  LIBRARIES halcon halconcpp #halcon_ros_if #TODO add with path hdevenginecpp halconcpp halcon
+  CATKIN_DEPENDS roscpp sensor_msgs std_msgs halcon_runtime_rpkg
   #DEPENDS OpenCV
 )
 
@@ -98,21 +101,24 @@ catkin_package(
 # include_directories(include)
 include_directories(
   include
-  /opt/halcon/include
-  /opt/halcon/include/hdevengine
   #${OpenCV_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
-link_directories(/opt/halcon/lib/x64-linux2.4-gcc40)
 
-## Declare a cpp library
 add_library(halcon_ros_if 
+ 	src/halcon_bridge.cpp 
+ 	src/halcon_bindings.cpp 
+)
+
+add_library(halcon_ros_if_hdev 
  	src/halcon_bridge.cpp 
  	src/halcon_bindings.cpp 
  	src/my_hdevoperatorimpl.cpp 
  	src/my_thread_impl.cpp
  	)
+ 	
+target_compile_definitions(halcon_ros_if_hdev PRIVATE HDEV)
 
 ## Declare a cpp executable
 #add_executable(halcon_ros_if src/test_main.cpp src/halcon_bridge.cpp src/halcon_bindings.cpp src/my_hdevoperatorimpl.cpp src/my_thread_impl.cpp)
@@ -122,10 +128,10 @@ add_library(halcon_ros_if
 # add_dependencies(halcon_ros_if_node halcon_ros_if_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
+target_link_libraries(halcon_ros_if_hdev
+  ${catkin_LIBRARIES}
+)
 target_link_libraries(halcon_ros_if
-  hdevenginecpp
-  halconcpp
-  halcon
   ${catkin_LIBRARIES}
 )
 
