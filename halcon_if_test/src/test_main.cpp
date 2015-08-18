@@ -5,6 +5,7 @@
  *      Author: svn
  */
 
+//#define HDEV
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
@@ -13,8 +14,13 @@
 #include "halcon_ros_if/halcon_bridge.h"
 
 #include "halconcpp/HalconCpp.h"
-
+#ifdef HDEV
 #include "my_hdevoperatorimpl.h"
+#include "hdevengine/HDevEngineCpp.h"
+#else
+#include "simple_test_procedure.h"
+#include "abc.h"
+#endif
 
 #include <vector>
 #include <string>
@@ -67,9 +73,13 @@ int main(int argc, char * argv[]){
 
 	  HTuple file(argv[2]);
 	  HTuple file2(argv[1]);
-	  CALL_PROCEDURE("", read_image, file , &image);
+	  ReadImage(&image, file);
+	  //CALL_PROCEDURE("", read_image, file , &image);
+	  //CALL_PROCEDURE("", ReadImage, file , &image);
 
-	  CALL_PROCEDURE("", read_image, file2, &im_Res);
+	  ReadImage(&im_Res, file);
+	  //CALL_PROCEDURE("", read_image, file2, &im_Res);
+	  //CALL_PROCEDURE("", ReadImage, file2, &im_Res);
 	  std::cout << "Im size after fill = " << sizeof(image) << std::endl;
 
 	  sensor_msgs::Image ros_im;
@@ -102,7 +112,7 @@ int main(int argc, char * argv[]){
 	  SensorMsgsToHImage(ros_im, &gen);
 
 	  CALL_PROCEDURE("/home/svn/projects/fiad/src/fiad_halcon/halcon_if/hdev_engine_ros_if/src/",
-	  			  abc, gen, gen, file, &hv_result, &im_Res);//, &hv_result);
+	  			  abc, gen, gen, &im_Res, file, &hv_result);//, &hv_result);
 
 	  /*
 	  int n_ch1 = image.CountChannels().I();
@@ -224,9 +234,13 @@ int main(int argc, char * argv[]){
 	  			  abc, back, back, file, &hv_result, &im_Res);
 
 */
-  }catch(HDevEngineCpp::HDevEngineException& hdev_exception) {
+  }
+#ifdef HDEV
+  catch(HDevEngineCpp::HDevEngineException& hdev_exception) {
 	  std::cout << (hdev_exception.Message()) << std::endl;
-  }catch(HException& ex) {
+  }
+#endif //HDEV
+catch(HException& ex) {
 	  std::cout <<  ex.ErrorText().Text() << std::endl;
   }
 

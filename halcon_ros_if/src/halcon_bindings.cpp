@@ -5,6 +5,7 @@
 
 
 using namespace HalconCpp;
+#ifdef HDEV
 using namespace HDevEngineCpp;
 
 class MyHDevEngine: public HDevEngine
@@ -74,3 +75,4 @@ void ProcedureCall::execute(){
     	std::cout << "result = " << control_outputs[j]->I() << std::endl;
     }
 }
+#endif //HDEV

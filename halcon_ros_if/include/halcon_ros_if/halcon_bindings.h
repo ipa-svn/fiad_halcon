@@ -7,7 +7,6 @@
 #include <iostream>
 #include "halconcpp/HalconCpp.h"
 
-#define HDEV // TODO not here
 
 #ifdef HDEV
 #include "hdevengine/HDevEngineCpp.h"
