@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(halcon_if_test)
 
+#Flag to use HDevEngine and hdev files 
+set(use_hdev TRUE)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   halcon_ros_if
+  halcon_runtime_rpkg
+  halcon_deveng_rpkg
   roscpp
   roslib
   sensor_msgs
@@ -98,32 +103,46 @@ catkin_package(
 # include_directories(include)
 # TODO: Check names of system library include directories (OpenCV)
 include_directories(
-  /opt/halcon/include	
+  halcon_components/gen	
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
 )
 
-link_directories(/opt/halcon/lib/x64-linux2.4-gcc40)
+link_directories(/home/svn/projects/fiad/devel/lib /opt/halcon/lib/x64-linux2.4-gcc40)
 ## Declare a cpp library
 # add_library(halcon_if_test
 #   src/${PROJECT_NAME}/halcon_if_test.cpp
 # )
 
+
 ## Declare a cpp executable
-add_executable(halcon_if_test_ex src/test_main.cpp)
+if(use_hdev)
+  add_executable(halcon_if_test_ex src/test_main.cpp)
+  target_compile_definitions(halcon_if_test_ex PRIVATE HDEV)
+else()
+  add_executable(halcon_if_test_ex src/test_main.cpp halcon_components/gen/simple_test_procedure.cpp halcon_components/gen/abc.cpp)
+endif()
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(halcon_if_test_node halcon_if_test_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
+if(use_hdev)
+message("HDEV set")
 target_link_libraries(halcon_if_test_ex
-	hdevenginecpp
-	halconcpp
-  	halcon
+	halcon_ros_if_hdev
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
 )
+else()
+message("no HDEV")
+target_link_libraries(halcon_if_test_ex
+	halcon_ros_if
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
+)
+endif()
 
 #############
 ## Install ##
