@@ -10,7 +10,7 @@ The halcon part of a component can exist in two forms:
 - For effizient execution of completed functions, hdevelop can generate c++ code for the internal profgrams and procedures. calling the generated functions differs a bit from the original calling strategy. The provided examples show how to implement the node to support both interfaces in a smooth way. Since the generated programs can be assecced directly with function calls, no extra interface is needed after the code generation.
 
 The halcon bindings offers a generic way to call both generated code 
-and procedures with HDevEngine by just a define opption. 
+and procedures with HDevEngine by just a define opption an linking to the suitable library in halcon_ros_if (see test project on how to do this). 
 In this way the code using the halcon does not have to care about 
 which alternative is beeing used.
 
